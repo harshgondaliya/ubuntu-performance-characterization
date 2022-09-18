@@ -1,0 +1,13 @@
+cat /sys/devices/system/cpu/intel_pstate/no_turbo
+ 
+echo "1" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+ 
+sudo nice -n -20 ./a.out
+
+gcc -pthread -O0 pthread-overhead.c -lm
+
+sudo taskset -c 0 nice -n -20 ./a.out
+
+posix_fadvice(POSIX_FADV_DONTNEED)
+
+/usr/bin/time -v sudo taskset -c 0 nice -n -20 ./a.out 
